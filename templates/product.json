@@ -3,48 +3,244 @@
     "main": {
       "type": "main-product",
       "blocks": {
-        "title": { "type": "title", "settings": { "show_vendor": false } },
-        "price": { "type": "price", "settings": {} },
-        "variant": { "type": "variant_picker", "settings": {} },
-        "quantity": { "type": "quantity", "settings": {} },
-        "buy": { "type": "buy_buttons", "settings": { "show_dynamic_checkout": true } },
-        "usps": {
-          "type": "usps",
+        "badges": {
+          "type": "badges",
           "settings": {
-            "usp_1": "Levering in België en Nederland",
-            "usp_2": "Veilig betalen",
-            "usp_3": "Persoonlijk advies voor je studio"
+            "badge_text": "",
+            "show_sale": true,
+            "sale_label": "Bespaar"
           }
         },
-        "description": { "type": "description", "settings": {} },
-        "shipping": {
-          "type": "collapsible",
+        "title": {
+          "type": "title",
           "settings": {
-            "heading": "Levering & retour",
-            "content": "<p>Vul hier je levertijden, verzendkosten en retourbeleid in.</p>"
+            "show_vendor": false
           }
         },
-        "care": {
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "variant": {
+          "type": "variant_picker",
+          "settings": {
+            "heading": "Opties"
+          }
+        },
+        "colour": {
+          "type": "help_card",
+          "settings": {
+            "icon": "palette",
+            "heading": "Twijfel je over de kleur?",
+            "action": "Vraag stalen aan",
+            "content": "<p>Wil je de kleur eerst zien? Neem contact met ons op voor een staal.</p>"
+          }
+        },
+        "stock": {
+          "type": "stock",
+          "settings": {
+            "text": "Op voorraad"
+          }
+        },
+        "buy": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": false
+          }
+        },
+        "help": {
+          "type": "help_link",
+          "settings": {
+            "text": "Hulp nodig? Neem contact op"
+          }
+        },
+        "delivery": {
           "type": "collapsible",
           "settings": {
-            "heading": "Onderhoud & reiniging",
-            "content": "<p>Vul hier onderhoudstips in, bijvoorbeeld hoe het materiaal gereinigd en ontsmet kan worden.</p>"
+            "icon": "box",
+            "heading": "Verzendkosten",
+            "content": "<p>Verzendkosten worden berekend bij het afrekenen.</p>"
+          }
+        },
+        "warranty": {
+          "type": "collapsible",
+          "settings": {
+            "icon": "shield",
+            "heading": "Garantie",
+            "content": "<p>Vul hier je garantievoorwaarden in.</p>"
+          }
+        },
+        "returns": {
+          "type": "collapsible",
+          "settings": {
+            "icon": "return",
+            "heading": "Retourneren binnen 14 dagen*",
+            "content": "<p>Als consument heb je 14 dagen bedenktijd. *Voorwaarden kunnen per product verschillen.</p>"
+          }
+        },
+        "features": {
+          "type": "features",
+          "settings": {
+            "heading": "Kenmerken"
+          }
+        },
+        "description": {
+          "type": "description",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "badges",
+        "title",
+        "price",
+        "variant",
+        "colour",
+        "stock",
+        "buy",
+        "help",
+        "delivery",
+        "warranty",
+        "returns",
+        "features",
+        "description"
+      ],
+      "settings": {}
+    },
+    "details": {
+      "type": "product-details",
+      "blocks": {
+        "i1": {
+          "type": "item",
+          "settings": {
+            "icon": "trophy",
+            "title": "Waarom dit bed?",
+            "content": "<p>Vul hier in waarom klanten voor dit product kiezen: ontwerp, ergonomie en afwerking.</p>"
+          }
+        },
+        "i2": {
+          "type": "item",
+          "settings": {
+            "icon": "clipboard",
+            "title": "Technische specificaties",
+            "content": "<p>Afmetingen, gewicht, draagvermogen en hoogteverstelling.</p>"
+          }
+        },
+        "i3": {
+          "type": "item",
+          "settings": {
+            "icon": "palette",
+            "title": "Gebruikte materialen",
+            "content": "<p>Bekleding, frame en onderstel.</p>"
+          }
+        },
+        "i4": {
+          "type": "item",
+          "settings": {
+            "icon": "users",
+            "title": "Personalisatie",
+            "content": "<p>Kies je kleur of vraag naar de mogelijkheden voor je studio.</p>"
           }
         }
       },
-      "block_order": ["title", "price", "variant", "quantity", "buy", "usps", "description", "shipping", "care"],
-      "settings": {}
+      "block_order": [
+        "i1",
+        "i2",
+        "i3",
+        "i4"
+      ],
+      "settings": {
+        "heading": "Perfect tot in de details",
+        "highlight": "details",
+        "open_first": true
+      }
+    },
+    "expect": {
+      "type": "icon-row",
+      "blocks": {
+        "e1": {
+          "type": "item",
+          "settings": {
+            "icon": "bed",
+            "label": "Lash bed"
+          }
+        },
+        "e2": {
+          "type": "item",
+          "settings": {
+            "icon": "book",
+            "label": "Handleiding"
+          }
+        },
+        "e3": {
+          "type": "item",
+          "settings": {
+            "icon": "document",
+            "label": "Garantiekaart"
+          }
+        }
+      },
+      "block_order": [
+        "e1",
+        "e2",
+        "e3"
+      ],
+      "settings": {
+        "heading": "Wat zit er in de levering?"
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "Van welke materialen is het meubel gemaakt?",
+            "answer": "<p>Zie het blok 'Gebruikte materialen' hierboven.</p>"
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "Is het meubel bestand tegen vocht en reinigingsmiddelen?",
+            "answer": "<p>Vul hier je onderhoudsadvies in.</p>"
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "question": "Bieden jullie personalisatie aan?",
+            "answer": "<p>Neem contact met ons op om de mogelijkheden te bespreken.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3"
+      ],
+      "settings": {
+        "style": "dark",
+        "heading": "FAQ",
+        "intro": "Meer informatie? Bekijk onze pagina met veelgestelde vragen.",
+        "surface": false
+      }
     },
     "related": {
       "type": "featured-collection",
       "settings": {
-        "eyebrow": "Maak je setup compleet",
-        "heading": "Ook interessant",
+        "eyebrow": "",
+        "heading": "Maak je setup compleet",
         "products_to_show": 4,
         "columns": 4,
-        "surface": true
+        "surface": false
       }
     }
   },
-  "order": ["main", "related"]
+  "order": [
+    "main",
+    "details",
+    "expect",
+    "faq",
+    "related"
+  ]
 }

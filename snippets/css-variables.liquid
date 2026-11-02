@@ -24,9 +24,12 @@
     --color-accent-text: {{ settings.color_accent_text }};
     --color-border: {{ settings.color_border }};
     --color-sale: {{ settings.color_sale }};
+    --color-badge: {{ settings.color_badge }};
+    --color-success: {{ settings.color_success }};
 
     --radius-button: {{ settings.button_radius }}px;
     --radius-card: {{ settings.card_radius }}px;
+    --radius-field: {{ settings.card_radius | at_most: 16 }}px;
     --page-width: {{ settings.page_width }}px;
   }
 </style>

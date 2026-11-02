@@ -13,7 +13,8 @@
         "available": {{ v.available | json }},
         "price": {{ v.price | money | json }},
         "compare": {% if v.compare_at_price > v.price %}{{ v.compare_at_price | money | json }}{% else %}null{% endif %},
-        "media": {% if v.featured_media %}{{ v.featured_media.id | json }}{% else %}null{% endif %}
+        "media": {% if v.featured_media %}{{ v.featured_media.id | json }}{% else %}null{% endif %},
+        "save": {% if v.compare_at_price > v.price %}{{ v.compare_at_price | minus: v.price | times: 100 | divided_by: v.compare_at_price }}{% else %}0{% endif %}
       }{% unless forloop.last %},{% endunless %}
     {%- endfor -%}
   ]
@@ -23,6 +24,7 @@
   <div class="container product">
     <div class="product__media" data-gallery="{{ section.id }}">
       <div class="gallery__main">
+        <button type="button" class="gallery__expand" data-gallery-expand aria-label="Volledig scherm">{% render 'icon', icon: 'expand' %}</button>
         {%- if product.media.size > 0 -%}
           {%- for media in product.media -%}
             {%- liquid
@@ -94,12 +96,26 @@
     <div class="product__info">
       {%- for block in section.blocks -%}
         {%- case block.type -%}
+          {%- when 'badges' -%}
+            <div class="badges" {{ block.shopify_attributes }}>
+              {%- if block.settings.badge_text != blank -%}
+                <span class="pill pill--badge">{{ block.settings.badge_text | escape }}</span>
+              {%- endif -%}
+              {%- if block.settings.show_sale -%}
+                {%- assign save = 0 -%}
+                {%- if current_variant.compare_at_price > current_variant.price -%}
+                  {%- assign save = current_variant.compare_at_price | minus: current_variant.price | times: 100 | divided_by: current_variant.compare_at_price -%}
+                {%- endif -%}
+                <span class="pill pill--sale" data-save-pill{% if save == 0 %} hidden{% endif %}>{{ block.settings.sale_label | default: 'Bespaar' | escape }} <span data-save-value>{{ save }}</span>%</span>
+              {%- endif -%}
+            </div>
+
           {%- when 'title' -%}
             <div {{ block.shopify_attributes }}>
               {%- if block.settings.show_vendor and product.vendor != blank -%}
                 <p class="product__vendor">{{ product.vendor | escape }}</p>
               {%- endif -%}
-              <h1 class="product__title h2">{{ product.title | escape }}</h1>
+              <h1 class="product__title">{{ product.title | escape }}</h1>
             </div>
 
           {%- when 'price' -%}
@@ -114,69 +130,101 @@
 
           {%- when 'variant_picker' -%}
             {%- unless product.has_only_default_variant -%}
-              <div class="field" {{ block.shopify_attributes }}>
-                <label for="VariantSelect-{{ section.id }}">{{ product.options | join: ' / ' }}</label>
-                <select
-                  id="VariantSelect-{{ section.id }}"
-                  class="select input"
-                  data-variant-select
-                  data-section="{{ section.id }}"
-                >
-                  {%- for v in product.variants -%}
-                    <option
-                      value="{{ v.id }}"
-                      {% if v.id == current_variant.id %}selected{% endif %}
-                    >
-                      {{ v.title | escape }}{% unless v.available %} &ndash; {{ 'products.sold_out' | t }}{% endunless %}
-                    </option>
-                  {%- endfor -%}
-                </select>
-              </div>
+              {%- if product.options.size == 1 -%}
+                <fieldset class="swatches" {{ block.shopify_attributes }}>
+                  <legend class="swatches__legend">{{ block.settings.heading | default: product.options[0] | escape }}</legend>
+                  <div class="swatches__grid">
+                    {%- for v in product.variants -%}
+                      <label class="swatch{% unless v.available %} is-soldout{% endunless %}">
+                        <input
+                          type="radio"
+                          name="Swatch-{{ section.id }}"
+                          value="{{ v.id }}"
+                          data-variant-radio
+                          data-section="{{ section.id }}"
+                          {% if v.id == current_variant.id %}checked{% endif %}
+                        >
+                        <span class="swatch__img">
+                          {%- if v.featured_media != blank -%}
+                            {{ v.featured_media.preview_image | image_url: width: 240 | image_tag: loading: 'lazy', alt: '' }}
+                          {%- else -%}
+                            <span class="swatch__text">{{ v.title | escape }}</span>
+                          {%- endif -%}
+                        </span>
+                        <span class="swatch__label">{{ v.title | escape }}</span>
+                      </label>
+                    {%- endfor -%}
+                  </div>
+                </fieldset>
+              {%- else -%}
+                <div class="field" {{ block.shopify_attributes }}>
+                  <label for="VariantSelect-{{ section.id }}">{{ product.options | join: ' / ' }}</label>
+                  <select id="VariantSelect-{{ section.id }}" class="select input" data-variant-select data-section="{{ section.id }}">
+                    {%- for v in product.variants -%}
+                      <option value="{{ v.id }}" {% if v.id == current_variant.id %}selected{% endif %}>
+                        {{ v.title | escape }}{% unless v.available %} &ndash; {{ 'products.sold_out' | t }}{% endunless %}
+                      </option>
+                    {%- endfor -%}
+                  </select>
+                </div>
+              {%- endif -%}
             {%- endunless -%}
 
+          {%- when 'help_card' -%}
+            <details class="help-card" {{ block.shopify_attributes }}>
+              <summary>
+                <span class="help-card__title">{% render 'icon', icon: block.settings.icon %}{{ block.settings.heading | escape }}</span>
+                <span class="help-card__action">{{ block.settings.action | escape }}{% render 'icon', icon: 'chevron-down' %}</span>
+              </summary>
+              <div class="help-card__content rte">{{ block.settings.content }}</div>
+            </details>
+
+          {%- when 'stock' -%}
+            {%- if block.settings.text != blank -%}
+              <p class="stock" data-stock{% unless current_variant.available %} hidden{% endunless %} {{ block.shopify_attributes }}>
+                <span class="stock__dot" aria-hidden="true"></span>{{ block.settings.text | escape }}
+              </p>
+            {%- endif -%}
+
           {%- when 'quantity' -%}
-            <div class="field" {{ block.shopify_attributes }}>
-              <label for="Quantity-{{ section.id }}">{{ 'products.quantity' | t }}</label>
-              <div>
-                <div class="qty">
-                  <button type="button" data-qty-change="-1" aria-label="-">&minus;</button>
-                  <input
-                    id="Quantity-{{ section.id }}"
-                    type="number"
-                    name="quantity"
-                    value="1"
-                    min="1"
-                    form="{{ product_form_id }}"
-                  >
-                  <button type="button" data-qty-change="1" aria-label="+">+</button>
-                </div>
-              </div>
-            </div>
+            {%- comment -%} Aantal zit nu in het blok Koopknoppen. {%- endcomment -%}
 
           {%- when 'buy_buttons' -%}
-            <div {{ block.shopify_attributes }}>
+            <div class="buy" data-buy {{ block.shopify_attributes }}>
               {%- form 'product', product, id: product_form_id, class: 'buy-buttons', novalidate: 'novalidate' -%}
                 <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-id="{{ section.id }}">
-                <button
-                  id="AddToCart-{{ section.id }}"
-                  type="submit"
-                  name="add"
-                  class="btn btn--full"
-                  data-label-add="{{ 'products.add_to_cart' | t }}"
-                  data-label-sold-out="{{ 'products.sold_out' | t }}"
-                  {% unless current_variant.available %}disabled{% endunless %}
-                >
-                  {%- if current_variant.available -%}
-                    {{ 'products.add_to_cart' | t }}
-                  {%- else -%}
-                    {{ 'products.sold_out' | t }}
-                  {%- endif -%}
-                </button>
+                <div class="buy-row">
+                  <div class="qty">
+                    <button type="button" data-qty-change="-1" aria-label="-">{% render 'icon', icon: 'chevron-left' %}</button>
+                    <label class="visually-hidden" for="Quantity-{{ section.id }}">{{ 'products.quantity' | t }}</label>
+                    <input id="Quantity-{{ section.id }}" type="number" name="quantity" value="1" min="1" inputmode="numeric">
+                    <button type="button" data-qty-change="1" aria-label="+">{% render 'icon', icon: 'chevron-right' %}</button>
+                  </div>
+                  <button
+                    id="AddToCart-{{ section.id }}"
+                    type="submit"
+                    name="add"
+                    class="btn btn--full"
+                    data-label-add="{{ 'products.add_to_cart' | t }}"
+                    data-label-sold-out="{{ 'products.sold_out' | t }}"
+                    {% unless current_variant.available %}disabled{% endunless %}
+                  >
+                    <span data-btn-label>
+                      {%- if current_variant.available -%}{{ 'products.add_to_cart' | t }}{%- else -%}{{ 'products.sold_out' | t }}{%- endif -%}
+                    </span>
+                    <span data-btn-price{% unless current_variant.available %} hidden{% endunless %}>&ndash; {{ current_variant.price | money }}</span>
+                  </button>
+                </div>
                 {%- if block.settings.show_dynamic_checkout -%}
                   {{ form | payment_button }}
                 {%- endif -%}
               {%- endform -%}
             </div>
+
+          {%- when 'help_link' -%}
+            <a class="help-link" href="{{ block.settings.link | default: routes.root_url }}" {{ block.shopify_attributes }}>
+              {% render 'icon', icon: 'help' %}<span>{{ block.settings.text | escape }}</span>
+            </a>
 
           {%- when 'usps' -%}
             <ul class="product-usps" {{ block.shopify_attributes }}>
@@ -184,6 +232,27 @@
               {%- if block.settings.usp_2 != blank -%}<li>{% render 'icon', icon: 'shield' %}{{ block.settings.usp_2 | escape }}</li>{%- endif -%}
               {%- if block.settings.usp_3 != blank -%}<li>{% render 'icon', icon: 'chat' %}{{ block.settings.usp_3 | escape }}</li>{%- endif -%}
             </ul>
+
+          {%- when 'features' -%}
+            <div class="features" {{ block.shopify_attributes }}>
+              {%- if block.settings.heading != blank -%}<h2 class="features__title">{{ block.settings.heading | escape }}</h2>{%- endif -%}
+              <ul class="features__list">
+                {%- for i in (1..4) -%}
+                  {%- liquid
+                    assign k_title = 'f' | append: i | append: '_title'
+                    assign k_text = 'f' | append: i | append: '_text'
+                    assign k_icon = 'f' | append: i | append: '_icon'
+                  -%}
+                  {%- if block.settings[k_title] != blank -%}
+                    <li class="feature">
+                      {% render 'icon', icon: block.settings[k_icon] %}
+                      <strong>{{ block.settings[k_title] | escape }}</strong>
+                      <span>{{ block.settings[k_text] | escape }}</span>
+                    </li>
+                  {%- endif -%}
+                {%- endfor -%}
+              </ul>
+            </div>
 
           {%- when 'description' -%}
             {%- if product.description != blank -%}
@@ -194,9 +263,13 @@
             <div class="rte" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
 
           {%- when 'collapsible' -%}
-            <details class="accordion" {{ block.shopify_attributes }}>
-              <summary>{{ block.settings.heading | escape }}{% render 'icon', icon: 'plus' %}</summary>
-              <div class="accordion__content rte">
+            <details class="info-card" {{ block.shopify_attributes }}>
+              <summary>
+                {%- if block.settings.icon != 'none' -%}{% render 'icon', icon: block.settings.icon %}{%- endif -%}
+                <span>{{ block.settings.heading | escape }}</span>
+                {% render 'icon', icon: 'plus' %}
+              </summary>
+              <div class="info-card__content rte">
                 {{ block.settings.content }}
                 {%- if block.settings.page != blank -%}
                   {{ block.settings.page.content }}
@@ -211,6 +284,16 @@
     </div>
   </div>
 </section>
+
+<div class="sticky-atc" data-sticky-atc hidden>
+  <div class="container sticky-atc__inner">
+    <div class="sticky-atc__info">
+      <span class="sticky-atc__title">{{ product.title | escape }}</span>
+      <span data-sticky-price>{% render 'price', product: product, variant: current_variant %}</span>
+    </div>
+    <button type="submit" form="{{ product_form_id }}" name="add" class="btn" {% unless current_variant.available %}disabled{% endunless %}>{{ 'products.add_to_cart' | t }}</button>
+  </div>
+</div>
 
 <script type="application/ld+json">
   {
@@ -245,28 +328,58 @@
   "blocks": [
     { "type": "@app" },
     {
-      "type": "title",
-      "name": "Titel",
+      "type": "badges",
+      "name": "Labels",
       "limit": 1,
       "settings": [
-        { "type": "checkbox", "id": "show_vendor", "label": "Merk tonen", "default": false }
+        { "type": "text", "id": "badge_text", "label": "Label (bruin)", "info": "Bijv. 'Laatste stuks'. Laat leeg om te verbergen.", "default": "" },
+        { "type": "checkbox", "id": "show_sale", "label": "Kortingspercentage tonen", "info": "Verschijnt automatisch als de productprijs lager is dan de 'Vergelijk-bij-prijs'.", "default": true },
+        { "type": "text", "id": "sale_label", "label": "Tekst voor korting", "default": "Bespaar" }
       ]
     },
+    { "type": "title", "name": "Titel", "limit": 1, "settings": [ { "type": "checkbox", "id": "show_vendor", "label": "Merk tonen", "default": false } ] },
     { "type": "price", "name": "Prijs", "limit": 1 },
-    { "type": "variant_picker", "name": "Uitvoering kiezen", "limit": 1 },
-    { "type": "quantity", "name": "Aantal", "limit": 1 },
     {
-      "type": "buy_buttons",
-      "name": "Koopknoppen",
+      "type": "variant_picker",
+      "name": "Uitvoering kiezen",
       "limit": 1,
       "settings": [
-        {
-          "type": "checkbox",
-          "id": "show_dynamic_checkout",
-          "label": "Snelle betaalknoppen tonen",
-          "info": "Bijv. Apple Pay of Shop Pay, afhankelijk van je betaalinstellingen.",
-          "default": true
-        }
+        { "type": "text", "id": "heading", "label": "Titel boven opties", "info": "Laat leeg om de naam van de optie te gebruiken (bijv. Kleur).", "default": "Opties" }
+      ]
+    },
+    {
+      "type": "help_card",
+      "name": "Uitklapkaart (gekleurd)",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icoon", "options": [ { "value": "palette", "label": "Materialen" }, { "value": "info", "label": "Info" }, { "value": "help", "label": "Hulp" }, { "value": "box", "label": "Pakket" } ], "default": "palette" },
+        { "type": "text", "id": "heading", "label": "Titel", "default": "Twijfel je over de kleur?" },
+        { "type": "text", "id": "action", "label": "Tekst rechts", "default": "Vraag stalen aan" },
+        { "type": "richtext", "id": "content", "label": "Inhoud", "default": "<p>Wil je de kleur eerst zien? Neem contact met ons op.</p>" }
+      ]
+    },
+    {
+      "type": "stock",
+      "name": "Voorraadstatus",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "text", "label": "Tekst (groen)", "info": "Verdwijnt automatisch als de gekozen uitvoering uitverkocht is.", "default": "Op voorraad" }
+      ]
+    },
+    { "type": "quantity", "name": "Aantal (oud)", "limit": 1 },
+    {
+      "type": "buy_buttons",
+      "name": "Aantal en koopknop",
+      "limit": 1,
+      "settings": [
+        { "type": "checkbox", "id": "show_dynamic_checkout", "label": "Snelle betaalknoppen tonen", "info": "Bijv. Apple Pay of Shop Pay, afhankelijk van je betaalinstellingen.", "default": false }
+      ]
+    },
+    {
+      "type": "help_link",
+      "name": "Hulplink",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Tekst", "default": "Hulp nodig? Neem contact op" },
+        { "type": "url", "id": "link", "label": "Link" }
       ]
     },
     {
@@ -279,18 +392,33 @@
         { "type": "text", "id": "usp_3", "label": "Voordeel 3", "default": "Persoonlijk advies voor je studio" }
       ]
     },
-    { "type": "description", "name": "Beschrijving", "limit": 1 },
     {
-      "type": "text",
-      "name": "Tekst",
+      "type": "features",
+      "name": "Kenmerken (kaartjes)",
+      "limit": 1,
       "settings": [
-        { "type": "richtext", "id": "text", "label": "Tekst", "default": "<p>Extra tekst</p>" }
+        { "type": "text", "id": "heading", "label": "Titel", "default": "Kenmerken" },
+        { "type": "select", "id": "f1_icon", "label": "Icoon 1", "options": [ { "value": "ruler", "label": "Afmeting" }, { "value": "sparkle", "label": "Beauty" }, { "value": "star", "label": "Kwaliteit" }, { "value": "shield", "label": "Garantie" }, { "value": "box", "label": "Pakket" }, { "value": "check", "label": "Vinkje" }, { "value": "truck", "label": "Levering" }, { "value": "tag", "label": "Prijs" } ], "default": "ruler" },
+        { "type": "text", "id": "f1_title", "label": "Titel 1", "default": "185 cm" },
+        { "type": "text", "id": "f1_text", "label": "Tekst 1", "default": "Lengte van het bed" },
+        { "type": "select", "id": "f2_icon", "label": "Icoon 2", "options": [ { "value": "ruler", "label": "Afmeting" }, { "value": "sparkle", "label": "Beauty" }, { "value": "star", "label": "Kwaliteit" }, { "value": "shield", "label": "Garantie" }, { "value": "box", "label": "Pakket" }, { "value": "check", "label": "Vinkje" }, { "value": "truck", "label": "Levering" }, { "value": "tag", "label": "Prijs" } ], "default": "sparkle" },
+        { "type": "text", "id": "f2_title", "label": "Titel 2", "default": "5 standen" },
+        { "type": "text", "id": "f2_text", "label": "Tekst 2", "default": "Verstelbare hoofdsteun" },
+        { "type": "select", "id": "f3_icon", "label": "Icoon 3", "options": [ { "value": "ruler", "label": "Afmeting" }, { "value": "sparkle", "label": "Beauty" }, { "value": "star", "label": "Kwaliteit" }, { "value": "shield", "label": "Garantie" }, { "value": "box", "label": "Pakket" }, { "value": "check", "label": "Vinkje" }, { "value": "truck", "label": "Levering" }, { "value": "tag", "label": "Prijs" } ], "default": "star" },
+        { "type": "text", "id": "f3_title", "label": "Titel 3", "default": "Hoogwaardig" },
+        { "type": "text", "id": "f3_text", "label": "Tekst 3", "default": "Kunstleer, makkelijk te reinigen" },
+        { "type": "select", "id": "f4_icon", "label": "Icoon 4", "options": [ { "value": "ruler", "label": "Afmeting" }, { "value": "sparkle", "label": "Beauty" }, { "value": "star", "label": "Kwaliteit" }, { "value": "shield", "label": "Garantie" }, { "value": "box", "label": "Pakket" }, { "value": "check", "label": "Vinkje" }, { "value": "truck", "label": "Levering" }, { "value": "tag", "label": "Prijs" } ], "default": "shield" },
+        { "type": "text", "id": "f4_title", "label": "Titel 4", "default": "Garantie" },
+        { "type": "text", "id": "f4_text", "label": "Tekst 4", "default": "Op constructie" }
       ]
     },
+    { "type": "description", "name": "Beschrijving", "limit": 1 },
+    { "type": "text", "name": "Tekst", "settings": [ { "type": "richtext", "id": "text", "label": "Tekst", "default": "<p>Extra tekst</p>" } ] },
     {
       "type": "collapsible",
       "name": "Uitklapblok",
       "settings": [
+        { "type": "select", "id": "icon", "label": "Icoon", "options": [ { "value": "none", "label": "Geen" }, { "value": "truck", "label": "Levering" }, { "value": "box", "label": "Pakket" }, { "value": "shield", "label": "Garantie" }, { "value": "return", "label": "Retour" }, { "value": "info", "label": "Info" }, { "value": "trophy", "label": "Uniek" }, { "value": "clipboard", "label": "Specificaties" }, { "value": "palette", "label": "Materialen" }, { "value": "users", "label": "Personalisatie" }, { "value": "chat", "label": "Service" } ], "default": "truck" },
         { "type": "text", "id": "heading", "label": "Titel", "default": "Levering & retour" },
         { "type": "richtext", "id": "content", "label": "Inhoud" },
         { "type": "page", "id": "page", "label": "Inhoud van pagina (optioneel)" }

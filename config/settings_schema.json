@@ -11,28 +11,30 @@
     "name": "Kleuren",
     "settings": [
       { "type": "color", "id": "color_background", "label": "Achtergrond", "default": "#FFFFFF" },
-      { "type": "color", "id": "color_surface", "label": "Vlakken (secties, kaarten)", "default": "#F5F3F0" },
+      { "type": "color", "id": "color_surface", "label": "Vlakken (secties, kaarten)", "default": "#F7F7F7" },
       { "type": "color", "id": "color_text", "label": "Tekst", "default": "#111111" },
       { "type": "color", "id": "color_muted", "label": "Subtiele tekst", "default": "#6B6B6B" },
       { "type": "color", "id": "color_accent", "label": "Accent (knoppen)", "default": "#111111" },
       { "type": "color", "id": "color_accent_text", "label": "Tekst op knoppen", "default": "#FFFFFF" },
-      { "type": "color", "id": "color_border", "label": "Randen", "default": "#E3E0DB" },
-      { "type": "color", "id": "color_sale", "label": "Korting", "default": "#B3382C" }
+      { "type": "color", "id": "color_border", "label": "Randen", "default": "#E9E9E9" },
+      { "type": "color", "id": "color_sale", "label": "Korting en prijs in de aanbieding", "default": "#D32F4B" },
+      { "type": "color", "id": "color_badge", "label": "Label (bijv. laatste stuks)", "default": "#7A4A32" },
+      { "type": "color", "id": "color_success", "label": "Op voorraad (groen)", "default": "#2E7D32" }
     ]
   },
   {
     "name": "Typografie",
     "settings": [
-      { "type": "font_picker", "id": "type_header_font", "label": "Titels", "default": "jost_n4" },
-      { "type": "font_picker", "id": "type_body_font", "label": "Tekst", "default": "inter_n4" }
+      { "type": "font_picker", "id": "type_header_font", "label": "Titels", "default": "dm_sans_n7" },
+      { "type": "font_picker", "id": "type_body_font", "label": "Tekst", "default": "dm_sans_n4" }
     ]
   },
   {
     "name": "Layout",
     "settings": [
       { "type": "range", "id": "page_width", "label": "Paginabreedte", "min": 1000, "max": 1600, "step": 20, "unit": "px", "default": 1280 },
-      { "type": "range", "id": "button_radius", "label": "Afronding knoppen", "min": 0, "max": 40, "step": 2, "unit": "px", "default": 0 },
-      { "type": "range", "id": "card_radius", "label": "Afronding kaarten en afbeeldingen", "min": 0, "max": 24, "step": 2, "unit": "px", "default": 0 }
+      { "type": "range", "id": "button_radius", "label": "Afronding knoppen", "min": 0, "max": 40, "step": 2, "unit": "px", "default": 40 },
+      { "type": "range", "id": "card_radius", "label": "Afronding kaarten en afbeeldingen", "min": 0, "max": 32, "step": 2, "unit": "px", "default": 24 }
     ]
   },
   {
