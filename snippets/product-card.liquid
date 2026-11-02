@@ -1,0 +1,66 @@
+{%- comment -%}
+  Product card.
+  Accepts:
+  - card_product: product object (blank renders a placeholder)
+  - placeholder_index: number for placeholder artwork (optional)
+{%- endcomment -%}
+<article class="card">
+  {%- if card_product != blank -%}
+    {%- liquid
+      assign first_media = card_product.featured_media
+      assign second_media = card_product.media[1]
+      assign on_sale = false
+      if card_product.compare_at_price > card_product.price
+        assign on_sale = true
+      endif
+    -%}
+    <a href="{{ card_product.url }}" class="card__media" tabindex="-1" aria-hidden="true">
+      {%- if first_media != blank -%}
+        {{
+          first_media.preview_image
+          | image_url: width: 900
+          | image_tag:
+            loading: 'lazy',
+            widths: '300, 450, 600, 900',
+            sizes: '(min-width: 990px) 25vw, 50vw',
+            alt: card_product.title
+        }}
+        {%- if second_media != blank -%}
+          {{
+            second_media.preview_image
+            | image_url: width: 900
+            | image_tag:
+              loading: 'lazy',
+              widths: '300, 450, 600, 900',
+              sizes: '(min-width: 990px) 25vw, 50vw',
+              alt: '',
+              class: 'card__img--hover'
+          }}
+        {%- endif -%}
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      {%- endif -%}
+    </a>
+    {%- if card_product.available == false -%}
+      <span class="card__badge">{{ 'products.sold_out' | t }}</span>
+    {%- elsif on_sale -%}
+      <span class="card__badge card__badge--sale">{{ 'products.sale' | t }}</span>
+    {%- endif -%}
+    <div class="card__info">
+      <h3 class="card__title"><a href="{{ card_product.url }}">{{ card_product.title | escape }}</a></h3>
+      {% render 'price', product: card_product %}
+    </div>
+  {%- else -%}
+    {%- liquid
+      assign ph = placeholder_index | default: 1 | modulo: 6 | plus: 1
+      assign ph_name = 'product-' | append: ph
+    -%}
+    <div class="card__media">
+      {{ ph_name | placeholder_svg_tag: 'placeholder-svg' }}
+    </div>
+    <div class="card__info">
+      <h3 class="card__title">{{ 'products.placeholder_title' | t }}</h3>
+      <div class="price"><span class="price__current">{{ 49900 | money }}</span></div>
+    </div>
+  {%- endif -%}
+</article>

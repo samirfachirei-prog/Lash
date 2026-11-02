@@ -1,0 +1,57 @@
+<section class="section">
+  <div class="container customer">
+    <h1>{{ 'customer.login' | t }}</h1>
+    {%- form 'customer_login', novalidate: 'novalidate' -%}
+      {%- if form.errors -%}
+        <div class="form-message form-message--error">{{ form.errors | default_errors }}</div>
+      {%- endif -%}
+      <div class="field">
+        <label for="CustomerEmail">{{ 'customer.email' | t }}</label>
+        <input id="CustomerEmail" class="input" type="email" name="customer[email]" autocomplete="email" required>
+      </div>
+      {%- if form.password_needed -%}
+        <div class="field">
+          <label for="CustomerPassword">{{ 'customer.password' | t }}</label>
+          <input id="CustomerPassword" class="input" type="password" name="customer[password]" autocomplete="current-password" required>
+        </div>
+      {%- endif -%}
+      <button class="btn" type="submit">{{ 'customer.login' | t }}</button>
+    {%- endform -%}
+
+    <div class="customer__links">
+      <span class="muted">{{ 'customer.no_account' | t }} <a href="{{ routes.account_register_url }}">{{ 'customer.register' | t }}</a></span>
+    </div>
+
+    <details id="RecoverDetails" class="accordion" style="margin-top: 2.5rem; border-top: 1px solid var(--color-border);">
+      <summary>{{ 'customer.forgot_password' | t }}{% render 'icon', icon: 'plus' %}</summary>
+      <div class="accordion__content">
+        {%- form 'recover_customer_password' -%}
+          {%- if form.posted_successfully? or form.errors -%}
+            <script>document.getElementById('RecoverDetails').open = true;</script>
+          {%- endif -%}
+          {%- if form.posted_successfully? -%}
+            <p class="form-message">{{ 'customer.recover_success' | t }}</p>
+          {%- else -%}
+            <p>{{ 'customer.recover_text' | t }}</p>
+            {%- if form.errors -%}
+              <div class="form-message form-message--error">{{ form.errors | default_errors }}</div>
+            {%- endif -%}
+            <div class="field">
+              <label for="RecoverEmail">{{ 'customer.email' | t }}</label>
+              <input id="RecoverEmail" class="input" type="email" name="email" autocomplete="email" required>
+            </div>
+            <button class="btn" type="submit">{{ 'customer.submit' | t }}</button>
+          {%- endif -%}
+        {%- endform -%}
+      </div>
+    </details>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Inloggen",
+  "class": "section-main-login",
+  "settings": []
+}
+{% endschema %}

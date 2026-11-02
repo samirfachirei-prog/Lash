@@ -1,0 +1,23 @@
+{
+  "type": "header",
+  "name": "Header",
+  "sections": {
+    "announcement": {
+      "type": "announcement-bar",
+      "settings": {
+        "text": "Persoonlijk advies bij je studio-inrichting · Levering in België en Nederland",
+        "link": "",
+        "color_bg": "#111111",
+        "color_text": "#FFFFFF"
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "logo_width": 140,
+        "menu": "main-menu"
+      }
+    }
+  },
+  "order": ["announcement", "header"]
+}

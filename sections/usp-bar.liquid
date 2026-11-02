@@ -1,0 +1,64 @@
+<section class="section section--tight{% if section.settings.surface %} section--surface{% endif %}">
+  <div class="container">
+    <div class="usp-grid" style="--cols: {{ section.blocks.size | at_least: 1 }};">
+      {%- for block in section.blocks -%}
+        <div class="usp" {{ block.shopify_attributes }}>
+          <span class="usp__icon">{% render 'icon', icon: block.settings.icon %}</span>
+          <div>
+            <h3>{{ block.settings.title | escape }}</h3>
+            {%- if block.settings.text != blank -%}
+              <p>{{ block.settings.text | escape }}</p>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Voordelen (USP's)",
+  "class": "section-usp",
+  "max_blocks": 4,
+  "settings": [
+    { "type": "checkbox", "id": "surface", "label": "Gekleurde achtergrond", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "usp",
+      "name": "Voordeel",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icoon",
+          "options": [
+            { "value": "truck", "label": "Levering" },
+            { "value": "shield", "label": "Veilig / garantie" },
+            { "value": "star", "label": "Kwaliteit" },
+            { "value": "chat", "label": "Service" },
+            { "value": "box", "label": "Pakket" },
+            { "value": "tag", "label": "Prijs" },
+            { "value": "sparkle", "label": "Beauty" }
+          ],
+          "default": "truck"
+        },
+        { "type": "text", "id": "title", "label": "Titel", "default": "Snelle levering" },
+        { "type": "text", "id": "text", "label": "Tekst", "default": "In België en Nederland" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Voordelen (USP's)",
+      "blocks": [
+        { "type": "usp", "settings": { "icon": "truck", "title": "Snelle levering", "text": "In België en Nederland" } },
+        { "type": "usp", "settings": { "icon": "star", "title": "Pro kwaliteit", "text": "Getest door lash artists" } },
+        { "type": "usp", "settings": { "icon": "shield", "title": "Veilig betalen", "text": "Bancontact, iDEAL en kaart" } },
+        { "type": "usp", "settings": { "icon": "chat", "title": "Persoonlijk advies", "text": "Hulp bij je studio-inrichting" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

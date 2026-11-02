@@ -1,0 +1,68 @@
+<script src="{{ 'shopify_common.js' | shopify_asset_url }}" defer="defer"></script>
+
+<section class="section">
+  <div class="container customer customer--wide">
+    <p class="text-center"><a href="{{ routes.account_url }}">&larr; {{ 'customer.back_to_account' | t }}</a></p>
+    <h1>{{ 'customer.addresses' | t }}</h1>
+
+    <p class="text-center">
+      <button type="button" class="btn" style="width:auto;" data-toggle-target="AddressNew">{{ 'customer.add_address' | t }}</button>
+    </p>
+
+    <div id="AddressNew" class="address-form" hidden>
+      {%- form 'customer_address', customer.new_address -%}
+        {%- if form.errors -%}
+          <div class="form-message form-message--error">{{ form.errors | default_errors }}</div>
+          <script>document.getElementById('AddressNew').hidden = false;</script>
+        {%- endif -%}
+        <h2 class="h3">{{ 'customer.add_address' | t }}</h2>
+        {% render 'address-fields', form: form, suffix: 'new' %}
+        <div class="address-actions">
+          <button type="submit" class="btn">{{ 'customer.save' | t }}</button>
+          <button type="button" class="btn btn--outline" data-toggle-target="AddressNew">{{ 'customer.cancel' | t }}</button>
+        </div>
+      {%- endform -%}
+    </div>
+
+    {%- paginate customer.addresses by 10 -%}
+      <div class="form-grid" style="margin-top: 2rem;">
+        {%- for address in customer.addresses -%}
+          <div class="address-card">
+            {%- if address == customer.default_address -%}
+              <p class="eyebrow">{{ 'customer.default_address' | t }}</p>
+            {%- endif -%}
+            {{ address | format_address }}
+            <div class="address-actions">
+              <button type="button" class="btn btn--outline" data-toggle-target="AddressEdit-{{ address.id }}">{{ 'customer.edit' | t }}</button>
+              <form method="post" action="{{ address.url }}" data-confirm="{{ 'customer.delete_confirm' | t }}">
+                <input type="hidden" name="_method" value="delete">
+                <button type="submit" class="btn btn--outline">{{ 'customer.delete' | t }}</button>
+              </form>
+            </div>
+            <div id="AddressEdit-{{ address.id }}" class="address-form" hidden>
+              {%- form 'customer_address', address -%}
+                {%- if form.errors -%}
+                  <div class="form-message form-message--error">{{ form.errors | default_errors }}</div>
+                {%- endif -%}
+                {% render 'address-fields', form: form, suffix: address.id %}
+                <div class="address-actions">
+                  <button type="submit" class="btn">{{ 'customer.save' | t }}</button>
+                  <button type="button" class="btn btn--outline" data-toggle-target="AddressEdit-{{ address.id }}">{{ 'customer.cancel' | t }}</button>
+                </div>
+              {%- endform -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+      {% render 'pagination', paginate: paginate %}
+    {%- endpaginate -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Adressen",
+  "class": "section-main-addresses",
+  "settings": []
+}
+{% endschema %}

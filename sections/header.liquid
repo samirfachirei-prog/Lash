@@ -1,0 +1,114 @@
+{%- liquid
+  assign menu = section.settings.menu
+  assign logo = section.settings.logo
+-%}
+<header class="site-header" data-header>
+  <div class="container header__inner">
+    <div class="header__left">
+      <details class="mobile-nav" data-mobile-nav>
+        <summary class="icon-btn" aria-label="{{ 'accessibility.open_menu' | t }}">
+          {% render 'icon', icon: 'menu' %}
+          {% render 'icon', icon: 'close' %}
+        </summary>
+        <div class="mobile-nav__panel">
+          <nav aria-label="{{ 'general.menu' | t }}">
+            <ul>
+              {%- for link in menu.links -%}
+                <li>
+                  <a href="{{ link.url }}">{{ link.title | escape }}</a>
+                  {%- if link.links != blank -%}
+                    <ul>
+                      {%- for child in link.links -%}
+                        <li><a href="{{ child.url }}">{{ child.title | escape }}</a></li>
+                      {%- endfor -%}
+                    </ul>
+                  {%- endif -%}
+                </li>
+              {%- endfor -%}
+            </ul>
+          </nav>
+          <div class="mobile-nav__extra">
+            {%- if shop.customer_accounts_enabled -%}
+              <a class="btn btn--outline" href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}">
+                {%- if customer -%}{{ 'customer.account' | t }}{%- else -%}{{ 'general.login' | t }}{%- endif -%}
+              </a>
+            {%- endif -%}
+          </div>
+        </div>
+      </details>
+      <form class="header__search" action="{{ routes.search_url }}" method="get" role="search">
+        <label class="visually-hidden" for="HeaderSearch">{{ 'general.search' | t }}</label>
+        <input id="HeaderSearch" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search' | t }}" autocomplete="off">
+        <button type="submit" aria-label="{{ 'general.search' | t }}">{% render 'icon', icon: 'search' %}</button>
+      </form>
+    </div>
+
+    <a href="{{ routes.root_url }}" class="header__logo">
+      {%- if logo != blank -%}
+        {%- assign logo_height = section.settings.logo_width | divided_by: logo.aspect_ratio | round -%}
+        {{
+          logo
+          | image_url: width: 600
+          | image_tag:
+            width: section.settings.logo_width,
+            height: logo_height,
+            loading: 'eager',
+            alt: shop.name
+        }}
+      {%- else -%}
+        {{ shop.name }}
+      {%- endif -%}
+    </a>
+
+
+    <div class="header__icons">
+      <a href="{{ routes.search_url }}" class="icon-btn header__search-link" aria-label="{{ 'general.search' | t }}">
+        {% render 'icon', icon: 'search' %}
+      </a>
+      {%- if shop.customer_accounts_enabled -%}
+        <a
+          href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}"
+          class="icon-btn"
+          aria-label="{{ 'general.account' | t }}"
+        >
+          {% render 'icon', icon: 'account' %}
+        </a>
+      {%- endif -%}
+      <a href="{{ routes.cart_url }}" class="icon-btn" aria-label="{{ 'accessibility.cart_count' | t: count: cart.item_count }}">
+        {% render 'icon', icon: 'cart' %}
+        {%- if cart.item_count > 0 -%}
+          <span class="cart-count" aria-hidden="true">{{ cart.item_count }}</span>
+        {%- endif -%}
+      </a>
+    </div>
+  </div>
+  <nav class="header__nav container" aria-label="{{ 'general.menu' | t }}">
+    <ul>
+      {%- for link in menu.links -%}
+        <li>
+          <a href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+          {%- if link.links != blank -%}
+            <ul class="dropdown">
+              {%- for child in link.links -%}
+                <li><a href="{{ child.url }}">{{ child.title | escape }}</a></li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+  </nav>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "class": "section-header",
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo" },
+    { "type": "range", "id": "logo_width", "label": "Logobreedte", "min": 60, "max": 300, "step": 10, "unit": "px", "default": 140 },
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" }
+  ],
+  "enabled_on": { "groups": ["header"] }
+}
+{% endschema %}

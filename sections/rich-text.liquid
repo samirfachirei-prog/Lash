@@ -1,0 +1,34 @@
+<section class="section{% if section.settings.surface %} section--surface{% endif %}">
+  <div class="container">
+    <div class="rich-text">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="eyebrow">{{ section.settings.eyebrow | escape }}</span>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2>{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <div class="rte muted">{{ section.settings.text }}</div>
+      {%- endif -%}
+      {%- if section.settings.button_label != blank -%}
+        <a class="btn" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">{{ section.settings.button_label | escape }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Tekst",
+  "class": "section-rich-text",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Kleine titel" },
+    { "type": "text", "id": "heading", "label": "Titel", "default": "Over Lashlume" },
+    { "type": "richtext", "id": "text", "label": "Tekst", "default": "<p>Vertel hier kort wie je bent en waarom lash artists bij jou moeten kopen.</p>" },
+    { "type": "text", "id": "button_label", "label": "Knoptekst" },
+    { "type": "url", "id": "button_link", "label": "Knoplink" },
+    { "type": "checkbox", "id": "surface", "label": "Gekleurde achtergrond", "default": false }
+  ],
+  "presets": [{ "name": "Tekst" }]
+}
+{% endschema %}

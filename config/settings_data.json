@@ -1,0 +1,21 @@
+{
+  "current": "Default",
+  "presets": {
+    "Default": {
+      "color_background": "#FFFFFF",
+      "color_surface": "#F5F3F0",
+      "color_text": "#111111",
+      "color_muted": "#6B6B6B",
+      "color_accent": "#111111",
+      "color_accent_text": "#FFFFFF",
+      "color_border": "#E3E0DB",
+      "color_sale": "#B3382C",
+      "type_header_font": "jost_n4",
+      "type_body_font": "inter_n4",
+      "page_width": 1280,
+      "button_radius": 0,
+      "card_radius": 0,
+      "free_shipping_threshold": 0
+    }
+  }
+}

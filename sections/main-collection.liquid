@@ -1,0 +1,56 @@
+{%- liquid
+  assign sort_by = collection.sort_by | default: collection.default_sort_by
+-%}
+<div class="collection-hero container">
+  <h1>{{ collection.title | escape }}</h1>
+  {%- if section.settings.show_description and collection.description != blank -%}
+    <div class="collection-hero__desc rte">{{ collection.description }}</div>
+  {%- endif -%}
+</div>
+
+<section class="section section--tight">
+  <div class="container">
+    {%- paginate collection.products by section.settings.products_per_page -%}
+      <div class="toolbar">
+        <span class="muted">{{ 'collections.products_count' | t: count: collection.products_count }}</span>
+        {%- if section.settings.enable_sorting -%}
+          <div>
+            <label for="SortBy" class="visually-hidden">{{ 'collections.sort_by' | t }}</label>
+            <select id="SortBy" data-sort-select>
+              {%- for option in collection.sort_options -%}
+                <option value="{{ option.value | escape }}"{% if option.value == sort_by %} selected{% endif %}>
+                  {{ option.name | escape }}
+                </option>
+              {%- endfor -%}
+            </select>
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- if collection.products.size > 0 -%}
+        <div class="grid grid--{{ section.settings.columns }}">
+          {%- for product in collection.products -%}
+            {% render 'product-card', card_product: product %}
+          {%- endfor -%}
+        </div>
+        {% render 'pagination', paginate: paginate %}
+      {%- else -%}
+        <p class="text-center muted">{{ 'collections.empty' | t }}</p>
+        <p class="text-center"><a class="btn btn--outline" href="{{ routes.all_products_collection_url }}">{{ 'cart.continue_shopping' | t }}</a></p>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collectiepagina",
+  "class": "section-main-collection",
+  "settings": [
+    { "type": "range", "id": "products_per_page", "label": "Producten per pagina", "min": 8, "max": 48, "step": 4, "default": 24 },
+    { "type": "range", "id": "columns", "label": "Kolommen op desktop", "min": 3, "max": 5, "step": 1, "default": 4 },
+    { "type": "checkbox", "id": "show_description", "label": "Beschrijving tonen", "default": true },
+    { "type": "checkbox", "id": "enable_sorting", "label": "Sorteren tonen", "default": true }
+  ]
+}
+{% endschema %}

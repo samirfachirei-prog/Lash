@@ -1,0 +1,18 @@
+{%- assign formatted_balance = gift_card.balance | money -%}
+<section class="section">
+  <div class="container gift-card">
+    <p class="eyebrow">{{ shop.name }}</p>
+    <h1>{{ 'gift_card.title' | t }}</h1>
+    <p class="h2">{{ 'gift_card.balance' | t: balance: formatted_balance }}</p>
+    {%- if gift_card.expired or gift_card.enabled == false -%}
+      <p class="form-message form-message--error">{{ 'gift_card.expired' | t }}</p>
+    {%- else -%}
+      <p class="muted">{{ 'gift_card.use_code' | t }}</p>
+      <div class="gift-card__code">{{ gift_card.code | format_code }}</div>
+    {%- endif -%}
+    <div class="hero__buttons" style="justify-content:center;">
+      <a class="btn" href="{{ shop.url }}">{{ 'general.shop_now' | t }}</a>
+      <button type="button" class="btn btn--outline" onclick="window.print();">{{ 'gift_card.print' | t }}</button>
+    </div>
+  </div>
+</section>

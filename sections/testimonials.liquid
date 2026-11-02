@@ -1,0 +1,59 @@
+<section class="section{% if section.settings.surface %} section--surface{% endif %}">
+  <div class="container">
+    <div class="section-header section-header--center">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="eyebrow">{{ section.settings.eyebrow | escape }}</span>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2>{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+    </div>
+    <div class="testimonials">
+      {%- for block in section.blocks -%}
+        <figure class="testimonial" {{ block.shopify_attributes }}>
+          <blockquote>{{ block.settings.quote | escape }}</blockquote>
+          <figcaption class="testimonial__author">
+            <strong>{{ block.settings.author | escape }}</strong>
+            {%- if block.settings.role != blank -%}
+              <span class="muted">{{ block.settings.role | escape }}</span>
+            {%- endif -%}
+          </figcaption>
+        </figure>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Reviews",
+  "class": "section-testimonials",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Kleine titel", "default": "Reviews" },
+    { "type": "text", "id": "heading", "label": "Titel", "default": "Wat lash artists zeggen" },
+    { "type": "checkbox", "id": "surface", "label": "Gekleurde achtergrond", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Review",
+      "settings": [
+        { "type": "textarea", "id": "quote", "label": "Review", "default": "Vervang deze tekst door een echte review van een klant." },
+        { "type": "text", "id": "author", "label": "Naam", "default": "Naam klant" },
+        { "type": "text", "id": "role", "label": "Studio / plaats", "default": "Lash studio, stad" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Reviews",
+      "blocks": [
+        { "type": "testimonial" },
+        { "type": "testimonial" },
+        { "type": "testimonial" }
+      ]
+    }
+  ]
+}
+{% endschema %}

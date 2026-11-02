@@ -1,0 +1,93 @@
+<section class="section{% if section.settings.surface %} section--surface{% endif %}">
+  <div class="container">
+    <div class="media-text{% if section.settings.layout == 'right' %} media-text--reverse{% endif %}">
+      <div class="media-text__media">
+        {%- if section.settings.image != blank -%}
+          {{
+            section.settings.image
+            | image_url: width: 1400
+            | image_tag:
+              loading: 'lazy',
+              widths: '400, 700, 1000, 1400',
+              sizes: '(min-width: 750px) 50vw, 100vw',
+              alt: section.settings.image.alt
+          }}
+        {%- else -%}
+          {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+        {%- endif -%}
+      </div>
+      <div class="media-text__content">
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="eyebrow">{{ section.settings.eyebrow | escape }}</span>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2>{{ section.settings.heading | escape }}</h2>
+        {%- endif -%}
+        {%- if section.settings.text != blank -%}
+          <div class="rte muted">{{ section.settings.text }}</div>
+        {%- endif -%}
+        {%- if section.blocks.size > 0 -%}
+          <ul class="checklist">
+            {%- for block in section.blocks -%}
+              <li {{ block.shopify_attributes }}>{% render 'icon', icon: 'check' %}<span>{{ block.settings.text | escape }}</span></li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+        {%- if section.settings.button_label != blank -%}
+          <a class="btn" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">{{ section.settings.button_label | escape }}</a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Afbeelding met tekst",
+  "class": "section-image-with-text",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Afbeelding" },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Positie afbeelding",
+      "options": [
+        { "value": "left", "label": "Links" },
+        { "value": "right", "label": "Rechts" }
+      ],
+      "default": "left"
+    },
+    { "type": "text", "id": "eyebrow", "label": "Kleine titel", "default": "Comfort voor jou en je klant" },
+    { "type": "text", "id": "heading", "label": "Titel", "default": "Gemaakt voor lange lash sessies" },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Tekst",
+      "default": "<p>Een set duurt al snel anderhalf tot twee uur. Daarom kiezen we meubels die je klant ontspannen laten liggen en jouw houding sparen.</p>"
+    },
+    { "type": "text", "id": "button_label", "label": "Knoptekst", "default": "Bekijk lash beds" },
+    { "type": "url", "id": "button_link", "label": "Knoplink" },
+    { "type": "checkbox", "id": "surface", "label": "Gekleurde achtergrond", "default": false }
+  ],
+  "blocks": [
+    {
+      "type": "point",
+      "name": "Opsommingspunt",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Tekst", "default": "Ergonomisch ontwerp" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Afbeelding met tekst",
+      "blocks": [
+        { "type": "point", "settings": { "text": "Ergonomische ligbedden met goede ondersteuning" } },
+        { "type": "point", "settings": { "text": "Zadelstoelen voor een gezonde werkhouding" } },
+        { "type": "point", "settings": { "text": "Makkelijk te reinigen materialen" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

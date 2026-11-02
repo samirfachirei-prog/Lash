@@ -1,0 +1,53 @@
+<section class="section{% if section.settings.surface %} section--surface{% endif %}">
+  <div class="container">
+    <div class="section-header section-header--center">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="eyebrow">{{ section.settings.eyebrow | escape }}</span>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2>{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+    </div>
+    <div class="faq">
+      {%- for block in section.blocks -%}
+        <details class="accordion" {{ block.shopify_attributes }}>
+          <summary>{{ block.settings.question | escape }}{% render 'icon', icon: 'plus' %}</summary>
+          <div class="accordion__content rte">{{ block.settings.answer }}</div>
+        </details>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Veelgestelde vragen",
+  "class": "section-faq",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Kleine titel", "default": "FAQ" },
+    { "type": "text", "id": "heading", "label": "Titel", "default": "Veelgestelde vragen" },
+    { "type": "checkbox", "id": "surface", "label": "Gekleurde achtergrond", "default": false }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Vraag",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Vraag", "default": "Vraag" },
+        { "type": "richtext", "id": "answer", "label": "Antwoord", "default": "<p>Antwoord</p>" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Veelgestelde vragen",
+      "blocks": [
+        { "type": "question", "settings": { "question": "Naar welke landen leveren jullie?", "answer": "<p>We leveren in België en Nederland. Pas dit antwoord aan naar jouw verzendbeleid.</p>" } },
+        { "type": "question", "settings": { "question": "Hoe lang duurt de levering van een lash bed?", "answer": "<p>Vul hier je levertijd in, bijvoorbeeld het aantal werkdagen voor grote pakketten.</p>" } },
+        { "type": "question", "settings": { "question": "Kan ik als salon op factuur bestellen?", "answer": "<p>Leg hier uit hoe bedrijven met een btw-nummer kunnen bestellen.</p>" } },
+        { "type": "question", "settings": { "question": "Kan ik een product retourneren?", "answer": "<p>Beschrijf hier je retourbeleid.</p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

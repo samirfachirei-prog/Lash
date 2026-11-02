@@ -1,0 +1,20 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-collection",
+      "settings": { "products_per_page": 24, "columns": 4, "show_description": true, "enable_sorting": true }
+    },
+    "usps": {
+      "type": "usp-bar",
+      "blocks": {
+        "usp1": { "type": "usp", "settings": { "icon": "truck", "title": "Snelle levering", "text": "In België en Nederland" } },
+        "usp2": { "type": "usp", "settings": { "icon": "star", "title": "Pro kwaliteit", "text": "Getest door lash artists" } },
+        "usp3": { "type": "usp", "settings": { "icon": "shield", "title": "Veilig betalen", "text": "Bancontact, iDEAL en kaart" } },
+        "usp4": { "type": "usp", "settings": { "icon": "chat", "title": "Persoonlijk advies", "text": "Hulp bij je studio-inrichting" } }
+      },
+      "block_order": ["usp1", "usp2", "usp3", "usp4"],
+      "settings": { "surface": true }
+    }
+  },
+  "order": ["main", "usps"]
+}

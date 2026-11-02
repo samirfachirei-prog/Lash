@@ -1,0 +1,16 @@
+{
+  "sections": {
+    "main": { "type": "main-cart", "settings": { "show_note": true } },
+    "upsell": {
+      "type": "featured-collection",
+      "settings": {
+        "eyebrow": "Vergeet je niet?",
+        "heading": "Maak je setup compleet",
+        "products_to_show": 4,
+        "columns": 4,
+        "surface": true
+      }
+    }
+  },
+  "order": ["main", "upsell"]
+}

@@ -1,0 +1,43 @@
+{%- comment -%}
+  Renders a price.
+  Accepts:
+  - product: product object (required)
+  - variant: variant object (optional; shows that exact variant price)
+  - price_id: id for the wrapper (optional, used by the variant picker)
+  - large: boolean (optional)
+{%- endcomment -%}
+{%- liquid
+  if variant != blank
+    assign current_price = variant.price
+    assign compare_price = variant.compare_at_price
+    assign price_varies = false
+  else
+    assign current_price = product.price
+    assign compare_price = product.compare_at_price
+    assign price_varies = product.price_varies
+  endif
+  assign on_sale = false
+  if compare_price > current_price
+    assign on_sale = true
+  endif
+  assign money_price = current_price | money
+-%}
+<div
+  class="price{% if on_sale %} price--sale{% endif %}{% if large %} price--large{% endif %}"
+  {% if price_id %}id="{{ price_id }}"{% endif %}
+>
+  {%- if on_sale -%}
+    <span class="visually-hidden">{{ 'products.sale_price' | t }}</span>
+  {%- endif -%}
+  <span class="price__current">
+    {%- if price_varies -%}
+      {{ 'products.from_price' | t: price: money_price }}
+    {%- else -%}
+      {{ money_price }}
+    {%- endif -%}
+  </span>
+  {%- if on_sale -%}
+    <span class="visually-hidden">{{ 'products.regular_price' | t }}</span>
+    <s class="price__compare">{{ compare_price | money }}</s>
+  {%- endif -%}
+</div>

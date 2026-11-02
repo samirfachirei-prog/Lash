@@ -1,0 +1,39 @@
+<div class="collection-hero container">
+  <h1>{{ blog.title | escape }}</h1>
+</div>
+<section class="section section--tight">
+  <div class="container">
+    {%- paginate blog.articles by 9 -%}
+      <div class="grid grid--1-mobile grid--3">
+        {%- for article in blog.articles -%}
+          <article>
+            <a href="{{ article.url }}" class="article-card__media" style="display:block;">
+              {%- if article.image -%}
+                {{
+                  article.image
+                  | image_url: width: 900
+                  | image_tag: loading: 'lazy', widths: '400, 600, 900', sizes: '(min-width: 990px) 33vw, 100vw', alt: article.title
+                }}
+              {%- else -%}
+                {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+              {%- endif -%}
+            </a>
+            <p class="muted" style="font-size:.85rem; margin-bottom:.35rem;">{{ article.published_at | date: format: 'date' }}</p>
+            <h2 class="h3"><a href="{{ article.url }}" style="text-decoration:none;">{{ article.title | escape }}</a></h2>
+            <p class="muted">{{ article.excerpt_or_content | strip_html | truncatewords: 24 }}</p>
+            <a class="link-arrow" href="{{ article.url }}">{{ 'blogs.read_more' | t }}</a>
+          </article>
+        {%- endfor -%}
+      </div>
+      {% render 'pagination', paginate: paginate %}
+    {%- endpaginate -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Blog",
+  "class": "section-main-blog",
+  "settings": []
+}
+{% endschema %}

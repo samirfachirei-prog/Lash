@@ -1,0 +1,40 @@
+<section class="section">
+  <div class="container customer">
+    <h1>{{ 'customer.register' | t }}</h1>
+    {%- form 'create_customer', novalidate: 'novalidate' -%}
+      {%- if form.errors -%}
+        <div class="form-message form-message--error">{{ form.errors | default_errors }}</div>
+      {%- endif -%}
+      <div class="form-grid">
+        <div class="field">
+          <label for="RegisterFirstName">{{ 'customer.first_name' | t }}</label>
+          <input id="RegisterFirstName" class="input" type="text" name="customer[first_name]" autocomplete="given-name">
+        </div>
+        <div class="field">
+          <label for="RegisterLastName">{{ 'customer.last_name' | t }}</label>
+          <input id="RegisterLastName" class="input" type="text" name="customer[last_name]" autocomplete="family-name">
+        </div>
+      </div>
+      <div class="field">
+        <label for="RegisterEmail">{{ 'customer.email' | t }}</label>
+        <input id="RegisterEmail" class="input" type="email" name="customer[email]" autocomplete="email" required>
+      </div>
+      <div class="field">
+        <label for="RegisterPassword">{{ 'customer.password' | t }}</label>
+        <input id="RegisterPassword" class="input" type="password" name="customer[password]" autocomplete="new-password" required>
+      </div>
+      <button class="btn" type="submit">{{ 'customer.create' | t }}</button>
+    {%- endform -%}
+    <div class="customer__links">
+      <a href="{{ routes.account_login_url }}">{{ 'customer.login' | t }}</a>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Registreren",
+  "class": "section-main-register",
+  "settings": []
+}
+{% endschema %}

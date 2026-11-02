@@ -1,0 +1,255 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "height": "large",
+        "alignment": "left",
+        "overlay_opacity": 25,
+        "eyebrow": "",
+        "heading": "Inrichting voor professionele lash studio's",
+        "text": "<p>Lash beds, zadelstoelen, lampen en accessoires, gekozen op comfort en afwerking.</p>",
+        "button_label": "Shop lash beds",
+        "button_link": "",
+        "button_label_2": "Alle producten",
+        "button_link_2": ""
+      }
+    },
+    "usps": {
+      "type": "usp-bar",
+      "blocks": {
+        "usp1": {
+          "type": "usp",
+          "settings": {
+            "icon": "truck",
+            "title": "Levering BE & NL",
+            "text": "Snel bij je thuis of in de studio"
+          }
+        },
+        "usp2": {
+          "type": "usp",
+          "settings": {
+            "icon": "star",
+            "title": "Professionele kwaliteit",
+            "text": "Gemaakt voor dagelijks gebruik"
+          }
+        },
+        "usp3": {
+          "type": "usp",
+          "settings": {
+            "icon": "shield",
+            "title": "Veilig betalen",
+            "text": "Bancontact, iDEAL en kaart"
+          }
+        },
+        "usp4": {
+          "type": "usp",
+          "settings": {
+            "icon": "chat",
+            "title": "Persoonlijk advies",
+            "text": "Hulp bij je studio-inrichting"
+          }
+        }
+      },
+      "block_order": [
+        "usp1",
+        "usp2",
+        "usp3",
+        "usp4"
+      ],
+      "settings": {
+        "surface": false
+      }
+    },
+    "categories": {
+      "type": "collection-list",
+      "blocks": {
+        "c1": {
+          "type": "collection",
+          "settings": {
+            "title": "Lash beds"
+          }
+        },
+        "c2": {
+          "type": "collection",
+          "settings": {
+            "title": "Zadelstoelen"
+          }
+        },
+        "c3": {
+          "type": "collection",
+          "settings": {
+            "title": "Lampen"
+          }
+        },
+        "c4": {
+          "type": "collection",
+          "settings": {
+            "title": "Spiegels & statieven"
+          }
+        }
+      },
+      "block_order": [
+        "c1",
+        "c2",
+        "c3",
+        "c4"
+      ],
+      "settings": {
+        "eyebrow": "",
+        "heading": "Shop per categorie"
+      }
+    },
+    "featured": {
+      "type": "featured-collection",
+      "settings": {
+        "eyebrow": "",
+        "heading": "Bestsellers",
+        "products_to_show": 4,
+        "columns": 4,
+        "surface": false
+      }
+    },
+    "comfort": {
+      "type": "image-with-text",
+      "blocks": {
+        "p1": {
+          "type": "point",
+          "settings": {
+            "text": "Ergonomische ligbedden met goede ondersteuning"
+          }
+        },
+        "p2": {
+          "type": "point",
+          "settings": {
+            "text": "Zadelstoelen voor een gezonde werkhouding"
+          }
+        },
+        "p3": {
+          "type": "point",
+          "settings": {
+            "text": "Makkelijk te reinigen materialen"
+          }
+        }
+      },
+      "block_order": [
+        "p1",
+        "p2",
+        "p3"
+      ],
+      "settings": {
+        "layout": "left",
+        "eyebrow": "Ergonomie",
+        "heading": "Gemaakt voor sessies van twee uur",
+        "text": "<p>Een volledige set duurt al snel anderhalf tot twee uur. Daarom kiezen we meubels waarop je klant ontspannen ligt en jij rechtop blijft werken.</p>",
+        "button_label": "Bekijk lash beds",
+        "surface": false
+      }
+    },
+    "setup": {
+      "type": "image-with-text",
+      "blocks": {
+        "s1": {
+          "type": "point",
+          "settings": {
+            "text": "Lash bed"
+          }
+        },
+        "s2": {
+          "type": "point",
+          "settings": {
+            "text": "Zadelstoel"
+          }
+        },
+        "s3": {
+          "type": "point",
+          "settings": {
+            "text": "Lash lamp"
+          }
+        },
+        "s4": {
+          "type": "point",
+          "settings": {
+            "text": "Spiegel en gsm-statief voor content"
+          }
+        }
+      },
+      "block_order": [
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ],
+      "settings": {
+        "layout": "right",
+        "eyebrow": "Complete setup",
+        "heading": "Alles voor je studio op één plek",
+        "text": "<p>Van lash bed tot spiegel: combineer het assortiment en richt je ruimte in zonder af te dingen op kwaliteit.</p>",
+        "button_label": "Shop de setup",
+        "surface": true
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "Naar welke landen leveren jullie?",
+            "answer": "<p>We leveren in België en Nederland.</p>"
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "Hoe lang duurt de levering van een lash bed?",
+            "answer": "<p>De levertijd staat bij elk product vermeld. Grotere meubels worden apart verzonden.</p>"
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "question": "Kan ik als salon op factuur bestellen?",
+            "answer": "<p>Ja. Vul je btw-nummer in bij het afrekenen of neem contact met ons op, dan sturen we een factuur op naam van je studio.</p>"
+          }
+        },
+        "q4": {
+          "type": "question",
+          "settings": {
+            "question": "Kan ik een product retourneren?",
+            "answer": "<p>Je hebt als consument 14 dagen bedenktijd. Neem contact met ons op voordat je terugstuurt.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4"
+      ],
+      "settings": {
+        "eyebrow": "",
+        "heading": "Veelgestelde vragen",
+        "surface": false
+      }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "heading": "Nieuwsbrief",
+        "text": "<p>Nieuwe producten en acties voor je studio. Geen spam, altijd uit te schrijven.</p>",
+        "surface": true
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "usps",
+    "categories",
+    "featured",
+    "comfort",
+    "setup",
+    "faq",
+    "newsletter"
+  ]
+}

@@ -1,0 +1,49 @@
+<section class="section{% if section.settings.surface %} section--surface{% endif %}">
+  <div class="container">
+    <div class="newsletter">
+      {%- if section.settings.heading != blank -%}
+        <h2>{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <div class="rte muted">{{ section.settings.text }}</div>
+      {%- endif -%}
+      {%- assign form_id = 'NewsletterForm-' | append: section.id -%}
+      {%- form 'customer', id: form_id -%}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        {%- if form.posted_successfully? -%}
+          <p class="form-message">{{ 'newsletter.success' | t }}</p>
+        {%- else -%}
+          {%- if form.errors -%}
+            <div class="form-message form-message--error">{{ form.errors | default_errors }}</div>
+          {%- endif -%}
+          <div class="newsletter__form">
+            <label class="visually-hidden" for="NewsletterEmail-{{ section.id }}">{{ 'newsletter.email' | t }}</label>
+            <input
+              id="NewsletterEmail-{{ section.id }}"
+              class="input"
+              type="email"
+              name="contact[email]"
+              required
+              autocomplete="email"
+              placeholder="{{ 'newsletter.email' | t }}"
+            >
+            <button class="btn" type="submit">{{ 'newsletter.subscribe' | t }}</button>
+          </div>
+        {%- endif -%}
+      {%- endform -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Nieuwsbrief",
+  "class": "section-newsletter",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Titel", "default": "Blijf op de hoogte" },
+    { "type": "richtext", "id": "text", "label": "Tekst", "default": "<p>Nieuwe producten, acties en tips voor je lash studio, recht in je inbox.</p>" },
+    { "type": "checkbox", "id": "surface", "label": "Gekleurde achtergrond", "default": true }
+  ],
+  "presets": [{ "name": "Nieuwsbrief" }]
+}
+{% endschema %}

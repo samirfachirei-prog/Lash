@@ -1,0 +1,63 @@
+{%- comment -%}
+  Address fields used inside a {% form 'customer_address' %}.
+  Accepts:
+  - form: the form object
+  - suffix: unique id suffix
+{%- endcomment -%}
+<div class="form-grid">
+  <div class="field">
+    <label for="AddressFirstName-{{ suffix }}">{{ 'customer.first_name' | t }}</label>
+    <input id="AddressFirstName-{{ suffix }}" class="input" type="text" name="address[first_name]" value="{{ form.first_name }}" autocomplete="given-name">
+  </div>
+  <div class="field">
+    <label for="AddressLastName-{{ suffix }}">{{ 'customer.last_name' | t }}</label>
+    <input id="AddressLastName-{{ suffix }}" class="input" type="text" name="address[last_name]" value="{{ form.last_name }}" autocomplete="family-name">
+  </div>
+  <div class="field">
+    <label for="AddressCompany-{{ suffix }}">{{ 'customer.company' | t }}</label>
+    <input id="AddressCompany-{{ suffix }}" class="input" type="text" name="address[company]" value="{{ form.company }}" autocomplete="organization">
+  </div>
+  <div class="field">
+    <label for="AddressPhone-{{ suffix }}">{{ 'customer.phone' | t }}</label>
+    <input id="AddressPhone-{{ suffix }}" class="input" type="tel" name="address[phone]" value="{{ form.phone }}" autocomplete="tel">
+  </div>
+  <div class="field">
+    <label for="AddressAddress1-{{ suffix }}">{{ 'customer.address1' | t }}</label>
+    <input id="AddressAddress1-{{ suffix }}" class="input" type="text" name="address[address1]" value="{{ form.address1 }}" autocomplete="address-line1">
+  </div>
+  <div class="field">
+    <label for="AddressAddress2-{{ suffix }}">{{ 'customer.address2' | t }}</label>
+    <input id="AddressAddress2-{{ suffix }}" class="input" type="text" name="address[address2]" value="{{ form.address2 }}" autocomplete="address-line2">
+  </div>
+  <div class="field">
+    <label for="AddressZip-{{ suffix }}">{{ 'customer.zip' | t }}</label>
+    <input id="AddressZip-{{ suffix }}" class="input" type="text" name="address[zip]" value="{{ form.zip }}" autocomplete="postal-code">
+  </div>
+  <div class="field">
+    <label for="AddressCity-{{ suffix }}">{{ 'customer.city' | t }}</label>
+    <input id="AddressCity-{{ suffix }}" class="input" type="text" name="address[city]" value="{{ form.city }}" autocomplete="address-level2">
+  </div>
+  <div class="field">
+    <label for="AddressCountry-{{ suffix }}">{{ 'customer.country' | t }}</label>
+    <select
+      id="AddressCountry-{{ suffix }}"
+      class="select input"
+      name="address[country]"
+      data-default="{{ form.country }}"
+      data-address-country
+      data-province-id="AddressProvince-{{ suffix }}"
+      data-province-container="AddressProvinceContainer-{{ suffix }}"
+      autocomplete="country"
+    >
+      {{ all_country_option_tags }}
+    </select>
+  </div>
+  <div class="field" id="AddressProvinceContainer-{{ suffix }}" style="display: none;">
+    <label for="AddressProvince-{{ suffix }}">{{ 'customer.province' | t }}</label>
+    <select id="AddressProvince-{{ suffix }}" class="select input" name="address[province]" data-default="{{ form.province }}" autocomplete="address-level1"></select>
+  </div>
+</div>
+<label class="checkbox">
+  {{ form.set_as_default_checkbox }}
+  {{ 'customer.set_default' | t }}
+</label>

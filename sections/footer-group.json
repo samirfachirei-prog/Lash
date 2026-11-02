@@ -1,0 +1,29 @@
+{
+  "type": "footer",
+  "name": "Footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "menu_shop": {
+          "type": "menu",
+          "settings": { "heading": "Shop", "menu": "main-menu" }
+        },
+        "menu_info": {
+          "type": "menu",
+          "settings": { "heading": "Info", "menu": "footer" }
+        },
+        "newsletter": {
+          "type": "newsletter",
+          "settings": { "heading": "Nieuwsbrief" }
+        }
+      },
+      "block_order": ["menu_shop", "menu_info", "newsletter"],
+      "settings": {
+        "text": "<p>Professionele inrichting voor lash studio's: lash beds, zadelstoelen, lampen en meer.</p>",
+        "show_payment_icons": true
+      }
+    }
+  },
+  "order": ["footer"]
+}

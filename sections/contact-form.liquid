@@ -1,0 +1,45 @@
+<section class="section section--tight">
+  <div class="container customer">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="text-center">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+    {%- form 'contact', id: 'ContactForm' -%}
+      {%- if form.posted_successfully? -%}
+        <p class="form-message">{{ 'contact.success' | t }}</p>
+      {%- endif -%}
+      {%- if form.errors -%}
+        <div class="form-message form-message--error">{{ form.errors | default_errors }}</div>
+      {%- endif -%}
+      <div class="form-grid">
+        <div class="field">
+          <label for="ContactName">{{ 'contact.name' | t }}</label>
+          <input id="ContactName" class="input" type="text" name="contact[name]" autocomplete="name" value="{{ form.name }}">
+        </div>
+        <div class="field">
+          <label for="ContactEmail">{{ 'customer.email' | t }}</label>
+          <input id="ContactEmail" class="input" type="email" name="contact[email]" autocomplete="email" required value="{{ form.email }}">
+        </div>
+      </div>
+      <div class="field">
+        <label for="ContactPhone">{{ 'customer.phone' | t }}</label>
+        <input id="ContactPhone" class="input" type="tel" name="contact[phone]" autocomplete="tel" value="{{ form.phone }}">
+      </div>
+      <div class="field">
+        <label for="ContactBody">{{ 'contact.message' | t }}</label>
+        <textarea id="ContactBody" class="input" name="contact[body]">{{ form.body }}</textarea>
+      </div>
+      <button class="btn" type="submit">{{ 'contact.send' | t }}</button>
+    {%- endform -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Contactformulier",
+  "class": "section-contact-form",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Titel", "default": "Stuur ons een bericht" }
+  ],
+  "presets": [{ "name": "Contactformulier" }]
+}
+{% endschema %}

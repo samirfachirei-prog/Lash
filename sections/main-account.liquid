@@ -1,0 +1,64 @@
+<section class="section">
+  <div class="container customer customer--wide">
+    <h1>{{ 'customer.account' | t }}</h1>
+    <p class="text-center"><a href="{{ routes.account_logout_url }}">{{ 'customer.logout' | t }}</a></p>
+
+    <div class="account-grid" style="margin-top: 2rem;">
+      <div>
+        <h2 class="h3">{{ 'customer.order_history' | t }}</h2>
+        {%- paginate customer.orders by 20 -%}
+          {%- if customer.orders.size > 0 -%}
+            <div class="table-wrap">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">{{ 'customer.order' | t }}</th>
+                    <th scope="col">{{ 'customer.date' | t }}</th>
+                    <th scope="col">{{ 'customer.payment_status' | t }}</th>
+                    <th scope="col">{{ 'customer.fulfillment_status' | t }}</th>
+                    <th scope="col">{{ 'customer.total' | t }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {%- for order in customer.orders -%}
+                    <tr>
+                      <td><a href="{{ order.customer_url }}">{{ order.name }}</a></td>
+                      <td>{{ order.created_at | date: format: 'date' }}</td>
+                      <td>{{ order.financial_status_label }}</td>
+                      <td>{{ order.fulfillment_status_label }}</td>
+                      <td>{{ order.total_net_amount | money_with_currency }}</td>
+                    </tr>
+                  {%- endfor -%}
+                </tbody>
+              </table>
+            </div>
+            {% render 'pagination', paginate: paginate %}
+          {%- else -%}
+            <p class="muted">{{ 'customer.no_orders' | t }}</p>
+          {%- endif -%}
+        {%- endpaginate -%}
+      </div>
+
+      <div>
+        <h2 class="h3">{{ 'customer.account_details' | t }}</h2>
+        <div class="address-card">
+          <p><strong>{{ customer.name }}</strong><br>{{ customer.email }}</p>
+          {%- if customer.default_address -%}
+            {{ customer.default_address | format_address }}
+          {%- endif -%}
+          <p style="margin-top: 1rem;">
+            <a href="{{ routes.account_addresses_url }}">{{ 'customer.view_addresses' | t: count: customer.addresses_count }}</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Mijn account",
+  "class": "section-main-account",
+  "settings": []
+}
+{% endschema %}
