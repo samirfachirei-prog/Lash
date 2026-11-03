@@ -551,3 +551,94 @@ textarea.input { min-height: 110px; }
 .faq-dark .accordion { border-color: rgba(255,255,255,.14); }
 .faq-dark .accordion summary { font-size: 1.125rem; font-weight: 400; padding: 1.5rem 0; }
 .faq-dark .accordion__content { color: rgba(255,255,255,.7); }
+
+
+/* ---------- Mobile polish ---------- */
+html { -webkit-tap-highlight-color: transparent; }
+body { overflow-x: clip; }
+a, button, summary, input, select, label { touch-action: manipulation; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}
+
+/* Header must fit 320px wide phones */
+.header__logo { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.header__logo img { max-width: 50vw; object-fit: contain; }
+.header__icons { flex-shrink: 0; }
+@media (max-width: 479px) {
+  .container { padding: 0 16px; }
+  .header__inner { gap: .5rem; min-height: 64px; }
+  .header__logo { font-size: 1.25rem; letter-spacing: .04em; }
+  .icon-btn { width: 42px; height: 42px; }
+  .icon-btn svg { width: 24px; height: 24px; }
+  .mobile-nav > summary { margin-right: -6px; }
+}
+
+/* Hero: use the visible height on mobile browsers (address bar) */
+@supports (height: 1svh) { .hero--large { min-height: min(74svh, 720px); } }
+@media (max-width: 749px) {
+  .hero--large { min-height: 440px; }
+  .hero--medium { min-height: 380px; }
+  .hero__content { padding: 32px 0 32px; }
+  .hero .container { padding: 0 20px; }
+  .hero__buttons .btn { flex: 1 1 100%; }
+}
+
+/* Touch targets (>= 44px) */
+.link-arrow { display: inline-flex; align-items: center; min-height: 44px; border-bottom: 0; text-decoration: underline; text-underline-offset: 4px; padding-bottom: 0; }
+.help-link { min-height: 44px; }
+.qty input { height: 44px; }
+.footer ul { gap: 0; }
+.footer li a { display: inline-block; padding: .65rem 0; }
+.footer__bottom a { display: inline-block; padding: .5rem 0; }
+.accordion summary, .info-card summary, .details__item summary { min-height: 56px; }
+.card__title a { display: inline-block; }
+
+/* Cart on small screens */
+@media (max-width: 479px) {
+  .cart-item { grid-template-columns: 80px 1fr; gap: .75rem 1rem; }
+  .cart-item > div:last-child { grid-column: 2; text-align: right; }
+  .cart-item__actions { justify-content: space-between; }
+  .cart-summary { padding: 1.25rem; }
+}
+
+/* Buy row never wider than its column */
+.buy-buttons { grid-template-columns: minmax(0, 1fr); }
+.buy-row { min-width: 0; }
+.buy-row .btn { white-space: nowrap; font-size: .9375rem; padding: 0 .75rem; }
+.qty { padding: 0 .15rem; }
+.qty button { width: 36px; }
+.qty input { width: 32px; }
+@media (max-width: 379px) { .buy-row [data-btn-price] { display: none; } }
+
+/* Product gallery: swipe between photos on phones and tablets */
+.product__media { position: relative; }
+@media (max-width: 989px) {
+  .gallery__main { display: flex; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; }
+  .gallery__main::-webkit-scrollbar { display: none; }
+  .gallery__slide, .gallery__slide.is-active { display: block; flex: 0 0 100%; width: 100%; scroll-snap-align: center; scroll-snap-stop: always; }
+  .gallery__thumbs { scrollbar-width: none; }
+  .gallery__thumbs::-webkit-scrollbar { display: none; }
+}
+.gallery__count { position: absolute; right: 14px; bottom: 14px; z-index: 3; padding: .25rem .7rem; border-radius: 20px; background: rgba(17,17,17,.7); color: #fff; font-size: .8125rem; font-weight: 600; pointer-events: none; }
+@media (min-width: 990px) { .gallery__count { display: none; } }
+.product__media .gallery__expand { top: 14px; right: 14px; }
+.gallery__thumbs { position: relative; }
+
+/* Sticky buy bar must not cover the footer */
+.has-sticky-atc .footer { padding-bottom: calc(32px + 88px + env(safe-area-inset-bottom)); }
+
+/* Mobile header: account lives in the menu panel */
+.header__account { display: none; }
+@media (min-width: 990px) { .header__account { display: inline-flex; } }
+@media (min-width: 480px) and (max-width: 989px) { .header__account { display: inline-flex; } }
+
+/* Mobile menu buttons */
+.mobile-nav__panel .btn { display: inline-flex; padding: 0 2rem; font-size: 1rem; font-family: var(--font-body); font-weight: 600; letter-spacing: 0; }
+
+/* Gallery counter sits on the photo, not on the thumbnails */
+.gallery__count { right: auto; bottom: auto; left: 14px; top: 14px; }
+
+/* The header section wrapper once shared the .section-header class with section headings */
+.shopify-section.section-header, .shopify-section-group-header-group { display: block; margin: 0; width: 100%; }
